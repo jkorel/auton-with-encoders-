@@ -1,0 +1,212 @@
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+@Autonomous(name = "B||R encoders facing depot")
+public class encodersAutonPrac extends LinearOpMode {
+
+    public DcMotor frontRight;
+    public DcMotor frontLeft;
+    public DcMotor backLeft;
+    public DcMotor backRight;
+    public DcMotor leftLift;
+    public DcMotor rightLift;
+    public Servo flippyRelic;
+    double TICKS_PER_IN = 1120/(4*Math.PI);
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        backLeft = hardwareMap.dcMotor.get("backLeft");
+        backRight = hardwareMap.dcMotor.get("backRight");
+        leftLift=hardwareMap.dcMotor.get("leftLift");
+        rightLift=hardwareMap.dcMotor.get("rightLift");
+        flippyRelic=hardwareMap.servo.get("flippyRelic");
+
+        leftLift.setDirection(DcMotor.Direction.REVERSE);
+        //do this with all motors
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //do this with all motors
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //do this with all motors
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //do this with all motors
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //do this with all motors
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        waitForStart();
+        flippyRelic.setPosition(1.0);
+
+        telemetry.addData("stage", "down1");
+                telemetry.update();
+        rightLift.setPower(-.45);//robot going up on lift
+        leftLift.setPower(-.45);
+        sleep(4200);
+        telemetry.addData("stage", "down1DONE");
+                telemetry.update();
+
+        telemetry.addData("stage","down2");
+                telemetry.update();
+        rightLift.setPower(-.45);//drop down to floor
+        leftLift.setPower(-.45);
+        sleep(1300);
+
+        telemetry.addData("stage", "down2DONE");
+                telemetry.update();
+        rightLift.setPower(0);//stop moving lift
+        leftLift.setPower(0);
+        sleep(500);
+        telemetry.addData("stage", "turn1");
+                telemetry.update();
+        sleep(500);
+        driveDistance(5.5, .35, .35);//turn
+        telemetry.addData("stage", "turn1DONE");
+                telemetry.update();
+        sleep(500);
+
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection((DcMotor.Direction.REVERSE));
+        telemetry.addData("stage", "back1");
+                telemetry.update();
+        sleep(500);
+        driveDistance(35,.75,.75);//back up
+        telemetry.addData("stage","back1DONE");
+                telemetry.update();
+        sleep(500);
+
+        telemetry.addData("stage","turn2");
+                telemetry.update();
+        sleep(500);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection((DcMotor.Direction.REVERSE));
+        driveDistance(4, .25, .25);//turn
+        telemetry.addData("stage", "turn2DONE");
+                telemetry.update();
+        sleep(500);
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        telemetry.addData("stage", "back2");
+                telemetry.update();
+        sleep(500);
+        driveDistance(8, .45, .45);//goes back into depot
+
+        telemetry.addData("stage", "back2DONE");
+                telemetry.update();
+        sleep(500);
+        telemetry.addData("stage", "turn3");
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        driveDistance(5, .45, .45);//turn
+        telemetry.update();
+
+
+        telemetry.addData("stage", "turn3DONE");
+                telemetry.update();
+        sleep(500);
+        telemetry.addData("stage", "back3");
+                telemetry.update();
+        sleep(500);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection((DcMotor.Direction.FORWARD));
+        driveDistance(20,.75,.75);
+        telemetry.addData("stage", "back3DONE");
+                telemetry.update();
+        sleep(500);
+
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection((DcMotor.Direction.FORWARD));
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection((DcMotor.Direction.FORWARD));
+        driveDistance(6,.45,.45);
+        telemetry.addData("stage", "oofspot");
+                telemetry.addData("leftDirection", frontLeft.getDirection());
+        telemetry.addData("rightDirection",frontRight.getDirection());
+        telemetry.update();
+        sleep(500);
+
+        telemetry.addData("stage", "flip");
+                telemetry.update();
+        sleep(500);
+        flippyRelic.setPosition(.2);
+        sleep(500);
+
+        telemetry.addData("stage", "flip");
+                telemetry.update();
+        sleep(500);
+        flippyRelic.setPosition(1.0);
+        sleep(500);
+
+
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection((DcMotor.Direction.FORWARD));
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection((DcMotor.Direction.REVERSE));
+        driveDistance(3,.45,.45);
+
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection((DcMotor.Direction.FORWARD));
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection((DcMotor.Direction.FORWARD));
+        driveDistance(9,.45,.45);
+    }
+    public void driveDistance(double inches, double leftPower, double rightPower)
+    {
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        int leftTickGoal = frontLeft.getCurrentPosition () + (int) (TICKS_PER_IN * inches);
+        int rightTickGoal = frontRight.getCurrentPosition() + (int) (TICKS_PER_IN * inches);
+
+        frontLeft.setTargetPosition(leftTickGoal);
+        frontRight.setTargetPosition(rightTickGoal);
+
+        do
+            {
+
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            frontRight.setPower(rightPower);
+            frontLeft.setPower(leftPower);
+
+
+            backLeft.setPower(frontLeft.getPower());
+            backRight.setPower(frontRight.getPower());
+
+
+            telemetry.addData("Left Enc ", frontLeft.getCurrentPosition());
+            telemetry.addData("Right Enc ", frontRight.getCurrentPosition());
+            updateTelemetry(telemetry);
+            telemetry.update();
+            }
+            while( Math.abs(frontLeft.getCurrentPosition()) < leftTickGoal || Math.abs(frontRight.getCurrentPosition()) < rightTickGoal);
+
+
+
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+    }
+
+}
